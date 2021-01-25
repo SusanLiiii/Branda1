@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import { Button, Text, View, StyleSheet, FlatList, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
@@ -62,28 +62,21 @@ const website = [
   "https://www.brandeis.edu/facilities/"
 ];
 
-const _handlePressButtonAsync = async () =>{
-    let result = await WebBrowser.openBrowserAsync("https://www.brandeis.edu/facilities/");
+const _handlePressButtonAsync = async (index) =>{
+    let result = await WebBrowser.openBrowserAsync(website[index]);
     setResult(result);
 };
 
-const Item = ({item, style}) => (
-
-  <TouchableOpacity onPress={_handlePressButtonAsync} style={[styles.item, style]}>
-    <Text style={styles.title}>{item.title}</Text>
-  </TouchableOpacity>
-);
-
-
   const [selectedId, setSelectedId] = useState(null);
 
-  const renderItem = ({ item}) => {
+  const renderItem = ({item, index, style}) => {
 
     return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-      />
+      <TouchableOpacity 
+        onPress={() => [setSelectedId(item.id), _handlePressButtonAsync(index)]} 
+        style={[styles.item, style]}>
+        <Text style={styles.title}>{item.title}</Text>
+      </TouchableOpacity>
     );
 };
   return (
